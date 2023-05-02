@@ -8,8 +8,8 @@ router.post('/users/login', Controller.login)
 router.post('/users/logout', auth, Controller.logout)
 router.get('/users/me', auth, Controller.getUser)
 router.get('/users', Controller.getAllUsers)
-router.get('/users/:id', adminAuth, Controller.getUserByID)
-router.patch('/users/:id', adminAuth, Controller.updateUser)
+router.get('/users/:id', Controller.getUserByID)
+router.patch('/users/:id', Controller.updateUser)
 router.delete('/users/:id', adminAuth, Controller.deleteUser)
 
 

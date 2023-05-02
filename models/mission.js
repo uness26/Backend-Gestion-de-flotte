@@ -4,7 +4,6 @@ const missionSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: new Date(),
-        required: true
     },
     lieuDep: {
         type: String,
@@ -20,12 +19,12 @@ const missionSchema = new mongoose.Schema({
     chauffeur: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+
     },
     vehicule: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Vehicule',
-        required: true
+        
     }
 })
 const Mission = mongoose.model('Mission', missionSchema)

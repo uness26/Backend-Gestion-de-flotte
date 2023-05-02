@@ -13,14 +13,15 @@ module.exports = {
     },
     getAllMissions: async (req, res) => {
         try {
-            if (req.user?.role === "ADMIN") {
-                const missions = await Mission.find({})
-            } else {
-                await req.user.populate('missions')
-                res.send(req.user.missions)
-            }
+            const missions = await Mission.find({})
+            res.send(missions)
+            // if (req.user?.role === "ADMIN") {
+            //     const missions = await Mission.find({})
+            // } else {
+            //     await req.user.populate('missions')
+            //     res.send(req.user.missions)
+            // }
         } catch (e) {
-            console.log(e)
             res.status(500).send()
         }
     },
