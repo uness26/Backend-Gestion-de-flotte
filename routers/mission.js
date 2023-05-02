@@ -4,7 +4,7 @@ const { auth, adminAuth } = require('../middlewares/auth')
 const router = new express.Router()
 
 router.post('/missions', adminAuth, Controller.createMission)
-router.get('/missions', auth, Controller.getAllMissions)
+router.get('/missions', Controller.getAllMissions)
 router.get('/missions/:id', auth, Controller.getMissionByID)
 router.patch('/missions/:id', adminAuth, Controller.updateMission)
 router.delete('/missions/:id', adminAuth, Controller.deleteMission)
