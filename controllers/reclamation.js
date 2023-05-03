@@ -4,7 +4,7 @@ module.exports = {
     createReclamation: async (req, res) => {
         const reclamation = new Reclamation({
             ...req.body,
-            chauffeur: req.user._id
+            // chauffeur: req.user._id
         })
         try {
             await reclamation.save()
@@ -15,29 +15,35 @@ module.exports = {
     },
     getAllReclamations: async (req, res) => {
         try {
-            if (req.user?.role === "ADMIN") {
-                const reclamations = await Reclamation.find({})
-                res.send(reclamations)
-            } else {
-                await req.user.populate('reclamations')
-                res.send(req.user.reclamations)
-            }
+            const reclamations = await Reclamation.find({})
+            res.send(reclamations)
+            // if (req.user?.role === "ADMIN") {
+            //     const reclamations = await Reclamation.find({})
+            //     res.send(reclamations)
+            // } else {
+            //     await req.user.populate('reclamations')
+            //     res.send(req.user.reclamations)
+            // }
         } catch (e) {
             res.status(500).send()
         }
     },
     getReclamationByID: async (req, res) => {
         const _id = req.params.id
-        let reclamation
+        // let reclamation
         try {
-            if (req.user?.role === "ADMIN") {
-                reclamation = await Reclamation.findById(_id)
-            } else {
-                reclamation = await Reclamation.findOne({ _id, chauffeur: req.user._id })
-            }
+            const reclamation = await Reclamation.findById(_id)
             if (!reclamation) {
                 return res.status(404).send()
             }
+            // if (req.user?.role === "ADMIN") {
+            //     reclamation = await Reclamation.findById(_id)
+            // } else {
+            //     reclamation = await Reclamation.findOne({ _id, chauffeur: req.user._id })
+            // }
+            // if (!reclamation) {
+            //     return res.status(404).send()
+            // }
             res.send(reclamation)
         } catch (e) {
             res.status(500).send()
