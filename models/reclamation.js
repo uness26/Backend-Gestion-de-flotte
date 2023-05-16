@@ -22,7 +22,6 @@ const reclamationSchema = new mongoose.Schema({
     chauffeur: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
     }
 })
 const Reclamation = mongoose.model('Reclamation', reclamationSchema)

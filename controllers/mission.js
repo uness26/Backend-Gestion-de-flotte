@@ -27,13 +27,20 @@ module.exports = {
     },
     getMissionByID: async (req, res) => {
         const _id = req.params.id
-        let mission
+        // let mission
         try {
             mission = await Mission.findById(_id).populate(['chauffeur', 'vehicule']);
-
             if (!mission) {
                 return res.status(404).send()
             }
+            // if (req.user.role === 'ADMIN') {
+            //     mission = await Mission.findById(_id)
+            // } else {
+            //     mission = await Mission.findOne({ _id, chauffeur: req.user._id })
+            // }
+            // if (!mission) {
+            //     return res.status(404).send()
+            // }
             res.send(mission)
         } catch (e) {
             res.status(500).send()

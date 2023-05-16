@@ -3,10 +3,10 @@ const Controller = require('../controllers/reclamation')
 const { auth, adminAuth, chauffeurAuth } = require('../middlewares/auth')
 const router = new express.Router()
 
-router.post('/reclamations', chauffeurAuth, Controller.createReclamation)
-router.get('/reclamations', auth, Controller.getAllReclamations)
-router.get('/reclamations/:id', auth, Controller.getReclamationByID)
-router.patch('/reclamations/:id', auth, Controller.updateReclamation)
-router.delete('/reclamations/:id', auth, Controller.deleteReclamation)
+router.post('/reclamations',  Controller.createReclamation)
+router.get('/reclamations',  Controller.getAllReclamations)
+router.get('/reclamations/:id',  Controller.getReclamationByID)
+router.patch('/reclamations/:id',  Controller.updateReclamation)
+router.delete('/reclamations/:id',  Controller.deleteReclamation)
 
 module.exports = router
