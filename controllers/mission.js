@@ -29,7 +29,7 @@ module.exports = {
         const _id = req.params.id
         // let mission
         try {
-            mission = await Mission.findById(_id).populate(['chauffeur', 'vehicule']);
+            let mission = await Mission.findById(_id).populate(['chauffeur', 'vehicule']);
             if (!mission) {
                 return res.status(404).send()
             }
