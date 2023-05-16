@@ -13,7 +13,7 @@ module.exports = {
     },
     getAllMissions: async (req, res) => {
         try {
-            const missions = await Mission.find({})
+            const missions = await Mission.find({}).populate(['chauffeur', 'vehicule']);
             res.send(missions)
             // if (req.user?.role === "ADMIN") {
             //     const missions = await Mission.find({})
@@ -29,11 +29,8 @@ module.exports = {
         const _id = req.params.id
         let mission
         try {
-            if (req.user.role === 'ADMIN') {
-                mission = await Mission.findById(_id)
-            } else {
-                mission = await Mission.findOne({ _id, chauffeur: req.user._id })
-            }
+            mission = await Mission.findById(_id).populate(['chauffeur', 'vehicule']);
+
             if (!mission) {
                 return res.status(404).send()
             }
@@ -44,7 +41,7 @@ module.exports = {
     },
     updateMission: async (req, res) => {
         const updates = Object.keys(req.body)
-        const allowedUpdatesArray = ['dateDep', 'lieuDep', 'lieuArr', 'etat', 'chauffeur', 'vehicule']
+        const allowedUpdatesArray = ['date', 'lieuDep', 'lieuArr', 'etat', 'chauffeur', 'vehicule']
         const isValidOp = updates.every((update) => allowedUpdatesArray.includes(update))
         if (!isValidOp) {
             return res.status(400).send({ error: 'INVALID UPDATES !' })
