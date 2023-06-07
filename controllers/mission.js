@@ -13,14 +13,13 @@ module.exports = {
     },
     getAllMissions: async (req, res) => {
         try {
-            const missions = await Mission.find({}).populate(['chauffeur', 'vehicule']);
-            res.send(missions)
-            // if (req.user?.role === "ADMIN") {
-            //     const missions = await Mission.find({})
-            // } else {
-            //     await req.user.populate('missions')
-            //     res.send(req.user.missions)
-            // }
+            if (req.user?.role === "ADMIN") {
+                const missions = await Mission.find({}).populate(['chauffeur', 'vehicule']);
+                res.send(missions)
+            } else {
+                const missions = await Mission.find({chauffeur: req.user._id }).populate(['chauffeur', 'vehicule']);
+                res.send(missions)
+            }
         } catch (e) {
             res.status(500).send()
         }
@@ -29,7 +28,7 @@ module.exports = {
         const _id = req.params.id
         // let mission
         try {
-            let mission = await Mission.findById(_id).populate(['chauffeur', 'vehicule']);
+            const mission = await Mission.findById(_id).populate(['chauffeur', 'vehicule']);
             if (!mission) {
                 return res.status(404).send()
             }
@@ -48,7 +47,7 @@ module.exports = {
     },
     updateMission: async (req, res) => {
         const updates = Object.keys(req.body)
-        const allowedUpdatesArray = ['date', 'lieuDep', 'lieuArr', 'etat', 'chauffeur', 'vehicule']
+        const allowedUpdatesArray = ['date', 'lieuDep', 'heureDep','heureArr','lieuArr', 'etat', 'chauffeur', 'vehicule']
         const isValidOp = updates.every((update) => allowedUpdatesArray.includes(update))
         if (!isValidOp) {
             return res.status(400).send({ error: 'INVALID UPDATES !' })

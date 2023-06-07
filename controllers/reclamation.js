@@ -3,8 +3,8 @@ const Reclamation = require('../models/reclamation')
 module.exports = {
     createReclamation: async (req, res) => {
         const reclamation = new Reclamation({
+            chauffeur: req.user._id,
             ...req.body,
-            // chauffeur: req.user._id
         })
         try {
             await reclamation.save()
@@ -15,15 +15,13 @@ module.exports = {
     },
     getAllReclamations: async (req, res) => {
         try {
-            const reclamations = await Reclamation.find({})
-            res.send(reclamations)
-            // if (req.user?.role === "ADMIN") {
-            //     const reclamations = await Reclamation.find({})
-            //     res.send(reclamations)
-            // } else {
-            //     await req.user.populate('reclamations')
-            //     res.send(req.user.reclamations)
-            // }
+            if (req.user?.role === "ADMIN") {
+                const reclamations = await Reclamation.find({}).populate('chauffeur')
+                res.send(reclamations)
+            } else {
+                await req.user.populate('reclamations')
+                res.send(req.user.reclamations)
+            }
         } catch (e) {
             res.status(500).send()
         }

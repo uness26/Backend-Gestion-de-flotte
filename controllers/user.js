@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const bcrypt = require('bcryptjs')
 
 module.exports = {
     createUser: async (req, res) => {
@@ -40,7 +41,7 @@ module.exports = {
         }
     },
     getUser: async (req, res) => {
-        res.send(req.user)
+        await res.send(req.user)
     },
     getAllUsers: async (req, res) => {
         try {
@@ -71,11 +72,11 @@ module.exports = {
         }
         try {
             const user = await User.findById(req.params.id)
-            updates.forEach((update) => user[update] = req.body[update])
-            await user.save()
             if (!user) {
                 return res.status(404).send()
             }
+            updates.forEach((update) => user[update] = req.body[update])
+            await user.save()
             res.send(user)
         } catch (e) {
             res.status(400).send(e)

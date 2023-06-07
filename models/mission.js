@@ -2,29 +2,32 @@ const mongoose = require('mongoose')
 
 const missionSchema = new mongoose.Schema({
     date: {
-        type: Date,
-        default: new Date(),
+        type:  String,
+    },
+    heureDep: {
+        type: String,
+    },
+    heureArr : {
+        type: String,
     },
     lieuDep: {
         type: String,
-        required: true
     },
     lieuArr: {
         type: String,
-        required: true
     },
     etat: {
         type: String,
+        enum: ['EN ROUTE', 'TERMINEE'],
     },
     chauffeur: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-
     },
     vehicule: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Vehicule',
-        
+
     }
 })
 const Mission = mongoose.model('Mission', missionSchema)

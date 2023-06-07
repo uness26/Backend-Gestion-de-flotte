@@ -70,7 +70,7 @@ userSchema.methods.toJSON = function () {
     delete userObject.password
     delete userObject.tokens
     return userObject
-  }
+}
 
 userSchema.methods.generateAuthToken = async function () {
     const user = this
@@ -81,13 +81,13 @@ userSchema.methods.generateAuthToken = async function () {
 }
 
 userSchema.statics.findByCredentials = async (email, password) => {
-    const user = await User.findOne({ email })
+    const user = await User.findOne({ email})
     if (!user) {
-        throw new Error('Unable to login')
+        throw new Error('Email Incorrect')
     }
     const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) {
-        throw new Error('Unable to login')
+        throw new Error('Password Incorrect')
     }
     return user
 }
