@@ -3,11 +3,12 @@ const mongoose = require('mongoose')
 const reclamationSchema = new mongoose.Schema({
     type: {
         type: String,
+        enum: ['Retard', 'Incident', 'Abcense', 'Autres'],
         required: true,
     },
     date: {
-        type: Date,
-        default: new Date()
+        type: String,
+        default: new Date().toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' }),
     },
     description: {
         type: String,
@@ -15,14 +16,16 @@ const reclamationSchema = new mongoose.Schema({
     },
     etat: {
         type: String,
-        enum: ['EN COURS', 'ANNULLEE', 'TRAITEE'],
-        default: 'EN COURS',
-        required: true
+        enum: ['En cour', 'Annulée', 'Traitée'],
     },
     chauffeur: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     }
-})
+},
+    {
+        timestamps: true
+    }
+)
 const Reclamation = mongoose.model('Reclamation', reclamationSchema)
 module.exports = Reclamation

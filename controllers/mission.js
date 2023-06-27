@@ -3,7 +3,7 @@ const User = require('../models/user')
 
 module.exports = {
     createMission: async (req, res) => {
-        const mission = new Mission(req.body)
+        const mission = new Mission(req.body,)
         try {
             await mission.save()
             res.status(201).send(mission)
@@ -14,10 +14,18 @@ module.exports = {
     getAllMissions: async (req, res) => {
         try {
             if (req.user?.role === "ADMIN") {
-                const missions = await Mission.find({}).populate(['chauffeur', 'vehicule']);
+                const missions = await Mission.find({}).populate(['chauffeur', 'vehicule']).sort({
+                    date: 1,
+                    heureDep: 1,
+                    createdAt: -1
+                });
                 res.send(missions)
             } else {
-                const missions = await Mission.find({chauffeur: req.user._id }).populate(['chauffeur', 'vehicule']);
+                const missions = await Mission.find({chauffeur: req.user._id }).populate(['chauffeur', 'vehicule']).sort({
+                    date: 1,
+                    heureDep: 1,
+                    createdAt: -1
+                });
                 res.send(missions)
             }
         } catch (e) {

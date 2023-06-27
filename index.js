@@ -1,5 +1,6 @@
-const express = require('express')
 require('./database/mongoose')
+require('dotenv').config()
+const express = require('express')
 const cors = require('cors')
 const userRouter = require('./routers/user')
 const vehiculeRouter = require('./routers/vehicule')

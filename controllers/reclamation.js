@@ -16,10 +16,18 @@ module.exports = {
     getAllReclamations: async (req, res) => {
         try {
             if (req.user?.role === "ADMIN") {
-                const reclamations = await Reclamation.find({}).populate('chauffeur')
+                const reclamations = await Reclamation.find({}).populate('chauffeur').sort({ createdAt: -1 })
                 res.send(reclamations)
             } else {
-                await req.user.populate('reclamations')
+                await req.user.populate({
+                    path: 'reclamations',
+                    options: {
+                        sort: {
+                            createdAt: -1
+                        }
+                    }
+
+                })
                 res.send(req.user.reclamations)
             }
         } catch (e) {
@@ -77,7 +85,7 @@ module.exports = {
         try {
             if (req.user?.role === "ADMIN") {
                 reclamation = await Reclamation.findByIdAndDelete(req.params.id)
-            }else{
+            } else {
                 reclamation = await Reclamation.findOneAndDelete({ _id, chauffeur: req.user._id })
             }
             if (!reclamation) {

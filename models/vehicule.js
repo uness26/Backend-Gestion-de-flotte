@@ -19,7 +19,10 @@ const vehiculeSchema = new mongoose.Schema({
         type: String,
         trim: true
     }
-})
+},
+    {
+        timestamps: true
+    })
 vehiculeSchema.virtual('missions', {
     ref: 'Mission',
     localField: '_id',

@@ -12,7 +12,7 @@ module.exports = {
     },
     getAllVehicule: async (req, res) => {
         try {
-            const vehicules = await Vehicule.find({})
+            const vehicules = await Vehicule.find({}).sort({createdAt: -1})
             res.send(vehicules)
         } catch (e) {
             res.status(500).send()
