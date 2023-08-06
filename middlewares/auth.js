@@ -7,7 +7,7 @@ const auth = async (req, res, next) => {
   try {
     const token = req.header('Authorization').replace('Bearer ', '')
     const decode = jwt.verify(token, 'new')
-    const user = await User.findOne({ _id: decode._id, 'tokens.token': token })
+    const user = await User.findOne({ _id: decode._id, 'token': token })
     if (!user) {
       throw new Error()
     }
@@ -24,7 +24,7 @@ const adminAuth = async (req, res, next) => {
   try {
     const token = req.header('Authorization').replace('Bearer ', '')
     const decode = jwt.verify(token, 'new')
-    const user = await User.findOne({ _id: decode._id, 'tokens.token': token })
+    const user = await User.findOne({ _id: decode._id, 'token': token })
     if (!user || user?.role !== Role.ADMIN) {
       throw new Error()
     }
@@ -41,7 +41,7 @@ const chauffeurAuth = async (req, res, next) => {
   try {
     const token = req.header('Authorization').replace('Bearer ', '')
     const decode = jwt.verify(token, 'new')
-    const user = await User.findOne({ _id: decode._id, 'tokens.token': token})
+    const user = await User.findOne({ _id: decode._id, 'token': token})
     if (!user || user?.role !== Role.CHAUFFEUR) {
       throw new Error()
     }

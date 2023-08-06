@@ -5,6 +5,12 @@ const jwt = require('jsonwebtoken')
 const Role = require('./role')
 
 const userSchema = new mongoose.Schema({
+    matricule: {
+        type : String,
+        required: true,
+        trim: true,
+        unique: true
+    },
     nom: {
         type: String,
         required: true,
@@ -12,10 +18,12 @@ const userSchema = new mongoose.Schema({
     },
     prenom: {
         type: String,
+        required: true,
         trim: true
     },
     CIN: {
         type: Number,
+        required: true,
         validate(value) {
             if (value.toString().length != 8) {
                 throw new Error('Invalid CIN')
@@ -23,6 +31,7 @@ const userSchema = new mongoose.Schema({
         }
     },
     tel: {
+        required: true,
         type: Number,
     },
     email: {
@@ -38,6 +47,7 @@ const userSchema = new mongoose.Schema({
         }
     },
     password: {
+        required: true,
         type: String,
         trim: true,
         minLength: 7,
@@ -46,11 +56,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: [Role.ADMIN, Role.CHAUFFEUR],
     },
-    tokens: [{
-        token: {
-            type: String,
-        }
-    }],
+    token: {
+        type: String,
+    },
+    fcmToken : {
+        type: String
+    }
 })
 
 userSchema.virtual('reclamations', {
@@ -68,20 +79,20 @@ userSchema.methods.toJSON = function () {
     const user = this
     const userObject = user.toObject()
     delete userObject.password
-    delete userObject.tokens
+    delete userObject.token
     return userObject
 }
 
 userSchema.methods.generateAuthToken = async function () {
     const user = this
     const token = jwt.sign({ _id: user._id.toString() }, 'new')
-    user.tokens = user.tokens.concat({ token })
+    user.token = token 
     await user.save()
     return token
 }
 
 userSchema.statics.findByCredentials = async (email, password) => {
-    const user = await User.findOne({ email})
+    const user = await User.findOne({ email })
     if (!user) {
         throw new Error('Email Incorrect')
     }

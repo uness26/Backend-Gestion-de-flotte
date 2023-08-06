@@ -19,37 +19,22 @@ module.exports = {
                 const reclamations = await Reclamation.find({}).populate('chauffeur').sort({ createdAt: -1 })
                 res.send(reclamations)
             } else {
-                await req.user.populate({
-                    path: 'reclamations',
-                    options: {
-                        sort: {
-                            createdAt: -1
-                        }
-                    }
-
-                })
-                res.send(req.user.reclamations)
+                const reclamations = await Reclamation.find({ chauffeur: req.user._id })
+                    .populate('chauffeur')
+                    .sort({ createdAt: -1 });
+                res.send(reclamations)
             }
         } catch (e) {
-            res.status(500).send()
+            res.status(500).send(e)
         }
     },
     getReclamationByID: async (req, res) => {
         const _id = req.params.id
-        // let reclamation
         try {
             const reclamation = await Reclamation.findById(_id)
             if (!reclamation) {
                 return res.status(404).send()
             }
-            // if (req.user?.role === "ADMIN") {
-            //     reclamation = await Reclamation.findById(_id)
-            // } else {
-            //     reclamation = await Reclamation.findOne({ _id, chauffeur: req.user._id })
-            // }
-            // if (!reclamation) {
-            //     return res.status(404).send()
-            // }
             res.send(reclamation)
         } catch (e) {
             res.status(500).send()

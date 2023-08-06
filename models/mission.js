@@ -16,6 +16,7 @@ const missionSchema = new mongoose.Schema({
     },
     lieuArr: {
         type: String,
+        required : true
     },
     etat: {
         type: String,
@@ -29,6 +30,8 @@ const missionSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Vehicule',
 
+
+
     }
     
 },
@@ -39,7 +42,7 @@ const missionSchema = new mongoose.Schema({
 
 missionSchema.pre('save', async function (next) {
     if (this.isModified('date')) {
-        this.date = new Date(this.date).toLocaleString('fr-FR', { dateStyle: 'short' });
+        this.date = await new Date(this.date).toLocaleString('fr-FR', { dateStyle: 'short' });
     }
     if (this.isModified('heureDep')) {
         this.heureDep = await new Date(this.heureDep).toLocaleString('fr-FR', { timeStyle: 'short' })

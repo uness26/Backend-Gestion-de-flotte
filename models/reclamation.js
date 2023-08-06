@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const reclamationSchema = new mongoose.Schema({
     type: {
         type: String,
-        enum: ['Retard', 'Incident', 'Abcense', 'Autres'],
+        enum: ['Retard', 'Incident', 'Absence', 'Autres'],
         required: true,
     },
     date: {
@@ -16,7 +16,8 @@ const reclamationSchema = new mongoose.Schema({
     },
     etat: {
         type: String,
-        enum: ['En cour', 'Annulée', 'Traitée'],
+        enum: ['En Cour', 'En Attente','Annulée', 'Traitée'],
+        default: 'En Attente'
     },
     chauffeur: {
         type: mongoose.Schema.Types.ObjectId,

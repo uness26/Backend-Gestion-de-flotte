@@ -6,7 +6,7 @@ const router = new express.Router()
 router.post('/missions', adminAuth, Controller.createMission)
 router.get('/missions', auth, Controller.getAllMissions)
 router.get('/missions/:id', auth, Controller.getMissionByID)
-router.patch('/missions/:id', auth, Controller.updateMission)
+router.patch('/missions/:id', adminAuth, Controller.updateMission)
 router.delete('/missions/:id', adminAuth, Controller.deleteMission)
 
 module.exports = router

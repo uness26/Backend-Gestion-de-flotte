@@ -1,5 +1,4 @@
 const User = require('../models/user')
-const bcrypt = require('bcryptjs')
 
 module.exports = {
     createUser: async (req, res) => {
@@ -26,22 +25,21 @@ module.exports = {
             const token = await user.generateAuthToken()
             res.send({ user, token })
         } catch (e) {
-            res.status(400).send()
+            res.status(400).send({ msg: 'Invalid Credentials' })
         }
     },
     logout: async (req, res) => {
         try {
-            req.user.tokens = req.user.tokens.filter((token) => {
-                return token.token !== req.token
-            })
+            req.user.token = ''
             await req.user.save()
-            res.send()
+            res.send('Success')
         } catch (e) {
-            res.status(500).send()
+            res.status(500).send({ error: e })
         }
     },
     getUser: async (req, res) => {
-        await res.send(req.user)
+        req.user.token = req.user.token
+        await res.send( req.user )
     },
     getAllUsers: async (req, res) => {
         try {
@@ -56,7 +54,7 @@ module.exports = {
         try {
             const user = await User.findById(_id)
             if (!user) {
-                return res.status(404).send()
+                return res.status(404).send({ msg: ' User Not Found ' })
             }
             res.send(user)
         } catch (e) {
@@ -65,7 +63,7 @@ module.exports = {
     },
     updateUser: async (req, res) => {
         const updates = Object.keys(req.body)
-        const allowedUpdatesArray = ['nom', 'prenom', 'email', 'password', 'CIN', 'tel', 'role']
+        const allowedUpdatesArray = ['matricule','nom', 'prenom', 'email', 'password', 'CIN', 'tel', 'role']
         const isValidOp = updates.every((update) => allowedUpdatesArray.includes(update))
         if (!isValidOp) {
             return res.status(400).send({ error: 'INVALID UPDATES !' })
