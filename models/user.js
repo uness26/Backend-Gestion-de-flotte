@@ -6,7 +6,7 @@ const Role = require('./role')
 
 const userSchema = new mongoose.Schema({
     matricule: {
-        type : String,
+        type: String,
         required: true,
         trim: true,
         unique: true
@@ -22,17 +22,13 @@ const userSchema = new mongoose.Schema({
         trim: true
     },
     CIN: {
-        type: Number,
+        type: String,
         required: true,
-        validate(value) {
-            if (value.toString().length != 8) {
-                throw new Error('Invalid CIN')
-            }
-        }
-    },
+        },
+    
     tel: {
         required: true,
-        type: Number,
+        type: String,
     },
     email: {
         type: String,
@@ -59,7 +55,7 @@ const userSchema = new mongoose.Schema({
     token: {
         type: String,
     },
-    fcmToken : {
+    fcmToken: {
         type: String
     }
 })
@@ -80,13 +76,14 @@ userSchema.methods.toJSON = function () {
     const userObject = user.toObject()
     delete userObject.password
     delete userObject.token
+    delete userObject.fcmToken
     return userObject
 }
 
 userSchema.methods.generateAuthToken = async function () {
     const user = this
-    const token = jwt.sign({ _id: user._id.toString() }, 'new')
-    user.token = token 
+    const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET_KEY)
+    user.token = token
     await user.save()
     return token
 }

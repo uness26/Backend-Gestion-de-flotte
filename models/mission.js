@@ -3,41 +3,42 @@ const mongoose = require('mongoose')
 
 const missionSchema = new mongoose.Schema({
     date: {
+        required: true,
         type: String,
     },
     heureDep: {
+        required: true,
         type: String,
     },
     heureArr: {
         type: String,
     },
     lieuDep: {
+        required: true,
         type: String,
     },
     lieuArr: {
         type: String,
-        required : true
+        required: true
     },
     etat: {
         type: String,
         enum: ['EN ROUTE', 'TERMINEE'],
     },
     chauffeur: {
+        required: true,
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
     vehicule: {
+        required: true,
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Vehicule',
-
-
-
     }
-    
 },
-{
-    timestamps : true
-})
+    {
+        timestamps: true
+    })
 
 
 missionSchema.pre('save', async function (next) {
