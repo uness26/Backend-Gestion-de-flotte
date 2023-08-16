@@ -1,0 +1,31 @@
+version: '3.3'
+
+services:
+  mongo:
+    ports:
+      - '27017:27017'
+    container_name: driver-database
+    restart: always
+    image: mongo
+    networks:
+      - app-network
+
+  nodejs-app:
+    image: driver-back:latest
+    container_name: driver-server
+    ports:
+      - "5000:5000" 
+    networks:
+      - app-network
+
+  reactjs-app:
+    image: driver-web-app-client:latest
+    container_name: driver-web-client
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
