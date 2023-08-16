@@ -7,6 +7,9 @@ WORKDIR /usr/src/app
 # Copier le fichier package.json et package-lock.json
 COPY package*.json ./
 
+# Installer env-cmd globalement
+RUN npm install -g env-cmd
+
 # Installer les dépendances
 RUN npm install
 
