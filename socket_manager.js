@@ -2,6 +2,8 @@ const { Server } = require("socket.io");
 const admin = require('firebase-admin');
 const serviceAccount = require("./config/serviceAccountKey.json")
 const User = require('./models/user')
+const Mission = require('./models/mission')
+
 
 
 admin.initializeApp({
@@ -35,7 +37,7 @@ function socketManager(server) {
         });
 
         socket.on('editEtat', async (data) => {
-            const user = await User.findById(missionData.chauffeur)
+            const user = await User.findById(data.selectedReclamation.chauffeur._id)
             console.log(`une reclamation a changer d"etat`, data.newEtat);
             sendPushNotification(user.fcmToken, 'Notification', `une reclamation a changer d"etat  ${data.newEtat}`)
         })
@@ -43,6 +45,16 @@ function socketManager(server) {
         socket.on("addReclamation", (chauffeur) => {
             io.emit("addReclamation", JSON.stringify(chauffeur))
             console.log(`New reclamation added for driver ${chauffeur}`);
+        })
+
+        socket.on("missionBegin", async (data) =>{
+            const mission = await Mission.findById(data)
+            mission.etat = 'EN ROUTE'
+            await mission.save()
+            const heure = JSON.stringify(mission.heureDep)
+            const date = JSON.stringify(mission.date)
+            console.log(`La mission de ${date} à ${heure} à commencer`)
+            io.emit("missionBegin", JSON.stringify(`La mission de ${date} à ${heure} à commencer`))
         })
 
         socket.on('disconnect', () => {
