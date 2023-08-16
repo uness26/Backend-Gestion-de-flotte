@@ -14,4 +14,4 @@ RUN npm install
 COPY . .
 
 # Commande par défaut pour démarrer l'application
-CMD ["node", "index.js"]
+CMD ["npm", "start"]
