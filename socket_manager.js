@@ -34,12 +34,13 @@ function socketManager(server) {
             const user = await User.findById(missionData.chauffeur)
             console.log(`New mission added for driver`, missionData);
             sendPushNotification(user.fcmToken, 'Notification', 'Vous avez une nouvelle mission')
+            io.emit('addMission', 'Vous avez une nouvelle mission')
         });
 
         socket.on('editEtat', async (data) => {
             const user = await User.findById(data.selectedReclamation.chauffeur._id)
-            console.log(`une reclamation a changer d"etat`, data.newEtat);
-            sendPushNotification(user.fcmToken, 'Notification', `une reclamation a changer d"etat  ${data.newEtat}`)
+            sendPushNotification(user.fcmToken, 'Notification', `La reclamation du ${data.selectedReclamation.date} a changer d'état  ${data.newEtat}`)
+            io.emit('editEtat', `La reclamation du ${data.selectedReclamation.date} a changer d'état à ${data.newEtat}`)
         })
 
         socket.on("addReclamation", (chauffeur) => {
