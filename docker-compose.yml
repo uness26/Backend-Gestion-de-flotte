@@ -22,7 +22,7 @@ services:
     image: driver-web-app-client:latest
     container_name: driver-web-client
     ports:
-      - "4000:4000"
+      - "3000:3000"
     networks:
       - app-network
 
